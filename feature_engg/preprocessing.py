@@ -6,9 +6,9 @@
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-def splitting(X, y):
+def splitting(X, y, test_size, random_state):
     X_train, X_test, y_train, y_test = train_test_split(
-         X, y, test_size=0.30, random_state=42)
+         X, y, test_size=test_size, random_state=random_state)
     print(f"\n Shape after Splitting")
     print(f"\nX_train:{X_train.shape} | X_test:{X_test.shape} \n y_train:{y_train.shape} | y_test:{y_test.shape}")
     return (X_train, X_test, y_train, y_test)
