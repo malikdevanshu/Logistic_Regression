@@ -11,7 +11,7 @@ def print_section(title: str):
     print("═" * width)
 
 def save_results(df: pd.DataFrame, filename: str = "results",
-                 output_dir: str = "results"):
+                 output_dir: str = "C:/Users/anshu/Jupiter_Learning_phase/lgrs/data"):
     os.makedirs(output_dir, exist_ok=True)
     timestamp    = datetime.now().strftime("%Y%m%d_%H%M%S")
     full_path    = os.path.join(output_dir, f"{filename}_{timestamp}.csv")

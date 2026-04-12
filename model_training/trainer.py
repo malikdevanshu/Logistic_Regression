@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 
-from sklearn_train.model import Logistic_regression_scratch, get_model
+from src.model import Logistic_regression_scratch, get_model
 
 def train_scratch_model(X_train:np.ndarray, y_train:np.ndarray,
                         learning_rate:float = 0.01, n_iterations:int = 1000):

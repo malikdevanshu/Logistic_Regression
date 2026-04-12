@@ -1,14 +1,13 @@
-import os
 import time
 import numpy as np
  
-from confusion_matrix.utils        import print_section, save_results, set_seed
-from Src.data_loader  import load_data, validate_data, split_target_features
-from feature_engg.preprocessing import splitting, scale_features
-from sklearn_train.trainer      import (train_scratch_model, train_all_penalties,
+from utils.utils        import print_section, save_results, set_seed
+from src.data_loader  import load_data, split_target_features
+from src.preprocessing import splitting, scale_features, validate_data
+from model_training.trainer      import (train_scratch_model, train_all_penalties,
                               run_cross_validation, run_grid_search)
-from grid_search.evaluator    import (compute_metrics, print_confusion_matrix,
-                              print_classification_report, compare_models
+from evaluation.evaluator    import (compute_metrics, print_confusion_matrix,
+                              print_classification_report, compare_models, print_metrics
                               )
 
 import warnings
@@ -16,7 +15,7 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
-DATA_PATH      = 'heart.csv'
+DATA_PATH      = 'C:/Users/anshu/Jupiter_Learning_phase/lgrs/data/heart.csv'
 TARGET_COL     = "target"
 TEST_SIZE      = 0.2
 RANDOM_STATE   = 42
@@ -63,16 +62,14 @@ def main():
     
     # Evaluate on test set
     scratch_pred    = scratch_model.predict(X_test_sc)
-    scratch_proba   = scratch_model.predict_proba(X_test_sc)
+    scratch_proba = scratch_model.predict_proba(X_test_sc)
+    if scratch_proba.ndim == 2:
+        scratch_proba = scratch_proba[:, 1]
     scratch_metrics = compute_metrics(y_test_np, scratch_pred, scratch_proba)
  
     print_confusion_matrix(y_test_np, scratch_pred)
     print_classification_report(y_test_np, scratch_pred)
-    print(f"\n  Accuracy  : {scratch_metrics['accuracy']:.4f}")
-    print(f"  Precision : {scratch_metrics['precision']:.4f}")
-    print(f"  Recall    : {scratch_metrics['recall']:.4f}")
-    print(f"  F1-Score  : {scratch_metrics['f1_score']:.4f}")
-    print(f"  ROC-AUC   : {scratch_metrics['roc_auc']:.4f}")
+    print_metrics("Scratch Logistic Regression", scratch_metrics)
 
 # ── 4. SKLEARN PENALTY VARIANTS ───────────────────────────────────────────
     print_section("4. SKLEARN MODELS  —  L1 / L2 / ElasticNet / None")
@@ -125,35 +122,21 @@ def main():
         proba   = model.predict_proba(X_test_sc)[:, 1]
         metrics = compute_metrics(y_test_np, pred, proba)
         all_results[name] = metrics
- 
-        print(f"\n{'─'*52}")
-        print(f"  MODEL : {name}")
-        print(f"{'─'*52}")
         print_confusion_matrix(y_test_np, pred)
         print_classification_report(y_test_np, pred)
-        print(f"  Accuracy  : {metrics['accuracy']:.4f}")
-        print(f"  Precision : {metrics['precision']:.4f}")
-        print(f"  Recall    : {metrics['recall']:.4f}")
-        print(f"  F1-Score  : {metrics['f1_score']:.4f}")
-        print(f"  ROC-AUC   : {metrics['roc_auc']:.4f}")
-
+        print_metrics(name, metrics, model.get_params())
+ 
     # Evaluate GridSearch best model
     best_pred    = best_model.predict(X_test_sc)
     best_proba   = best_model.predict_proba(X_test_sc)[:, 1]
     best_metrics = compute_metrics(y_test_np, best_pred, best_proba)
     all_results["GridSearch Best"] = best_metrics
+    print_confusion_matrix(y_test_np, pred)
+    print_classification_report(y_test_np, pred)
+    print_metrics("Best GridSearch Model", best_metrics, grid.best_params_)
+
  
-    print(f"\n{'─'*52}")
-    print(f"  MODEL : GridSearch Best")
-    print(f"  Params: {grid.best_params_}")
-    print(f"{'─'*52}")
-    print_confusion_matrix(y_test_np, best_pred)
-    print_classification_report(y_test_np, best_pred)
-    print(f"  Accuracy  : {best_metrics['accuracy']:.4f}")
-    print(f"  Precision : {best_metrics['precision']:.4f}")
-    print(f"  Recall    : {best_metrics['recall']:.4f}")
-    print(f"  F1-Score  : {best_metrics['f1_score']:.4f}")
-    print(f"  ROC-AUC   : {best_metrics['roc_auc']:.4f}")
+    
 
 # ── 8. COMPARE & SAVE ─────────────────────────────────────────────────────
     print_section("8. FINAL MODEL COMPARISON  (sorted by F1-Score ↓)")
@@ -176,7 +159,6 @@ def main():
     # ── DONE ──────────────────────────────────────────────────────────────────
     total = time.time() - pipeline_start
     print_section(f"PIPELINE COMPLETE  —  Total time: {total:.1f}s")
- 
  
 
 

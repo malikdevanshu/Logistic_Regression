@@ -61,3 +61,11 @@ def compare_models(results: dict):
     df = df.sort_values("f1_score", ascending=False)
     return df
         
+def print_metrics(name, metrics, params=None):
+    print(f"\n{'─'*52}")
+    print(f"  MODEL : {name}")
+    if params:
+        print(f"  Params: {params}")
+    print(f"{'─'*52}")
+    for k in ["accuracy","precision","recall","f1_score","roc_auc"]:
+        print(f"  {k.capitalize():<12}: {metrics[k]:.4f}")

@@ -3,6 +3,7 @@ model.py
 --------
 Contains:
  LogisticRegressionScratch  — pure NumPy implementation (sigmoid, gradient descent)
+ LogisticRegression - sklearn penalty models(l1, l2, elasticnet)
 """
 import numpy as np
 from sklearn.linear_model import LogisticRegression
