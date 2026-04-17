@@ -1,0 +1,75 @@
+[project]
+name = "lgrs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "isort>=8.0.1",
+    "matplotlib==3.10.8",
+    "numpy==2.4.2",
+    "pandas==3.0.1",
+    "ruff>=0.15.10",
+    "scikit-learn==1.8.0",
+    "seaborn==0.13.2",
+]
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+use_parentheses = true
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+default_section = "THIRDPARTY"
+known_first_party = ["lgrs"]
+lines_between_types = 1
+lines_between_sections = 1
+combine_as_imports = true
+force_single_line = false
+order_by_type = true
+case_sensitive = false
+skip = [".venv", "venv", "node_modules", "migrations"]
+skip_gitignore = true
+balanced_wrapping = true
+atomic = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 80
+indent-width = 4
+extend-include = ["*.ipynb"]
+extend-exclude = ["docs", "test", "tests"]
+
+[tool.ruff.lint]
+select = ["F", "E"]
+extend-select = [
+    "C90","I","N","UP","YTT","ANN","ASYNC","TRIO","S","BLE","B","A","COM",
+    "C4","DTZ","T10","DJ","EM","EXE","FA","ISC","ICN","G","INP","PIE","PYI","PT","Q",
+    "RSE","RET","SLOT","SIM","TID","TCH","INT","ARG","PTH","PD","PL","TRY","FLY","NPY",
+    "AIR","PERF","FURB","LOG","RUF",
+]
+ignore = [
+    "ANN101","ANN102","I001","NPY002","INP001","TRY003",
+    "ISC001","COM812","EM101","ANN401","S311","PLW1641","N999",
+]
+fixable = ["ALL"]
+unfixable = []
+preview = true
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+preview = false
+docstring-code-format = true
+
+[tool.ruff.lint.mccabe]
+max-complexity = 24
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = false
+ignore-fully-untyped = false
