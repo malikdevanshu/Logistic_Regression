@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "isort>=8.0.1",
     "matplotlib==3.10.8",
+    "mypy>=1.20.2",
     "numpy==2.4.2",
     "pandas==3.0.1",
     "pydocstyle>=6.3.0",
@@ -74,3 +75,13 @@ convention = "numpy"
 [tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = false
 ignore-fully-untyped = false
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_configs = true
+warn_return_any = true
+check_untyped_defs = true
+cache_dir = ".mypy_cache"
+pretty = true
+show_error_codes = true
